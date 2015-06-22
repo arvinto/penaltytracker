@@ -5,36 +5,109 @@
   <title>Penalty Tracker</title>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
 </head>
-<body>
-<div ng-app="FeeApp" ng-controller="myController" ng-init="feeOne=0, feeTwo=0">
-<table>
-  <tr>
-    <td>
-        Arvin:
-    </td>
-    <td>
-        <input type="number" ng-model="feeOne" value="0">
-    </td>
-     <td>
-        <input type="number" ng-model="feeTwo" value="0">
-    <td>
-      <p>  Total:{{total()}}</p>
-    </td>
-  </tr>
-</table>
-</div>
+<body ng-app="FeeApp" ng-controller="myController">
+  <div ng-init="amount=0">
+    <table>
+      <h3>Penalty Tracker</h3>
+      <tr>
+        <th>Name</th>
+        <th>Amount</th>
+      </tr>
+      <tr>
+      <form>
+        <td><input type="text" ng-model="person"/></td>
+        <td><input type="number" ng-model="amount"/></td>
+        <td ng-if="person">{{person+": "}}</td>
+        <td ng-if="amount"> {{amount}}</td>
+        <td><input type="button" ng-click="addItem()" value="Add" /></td>
+        <td><input type="submit" ng-click="payAmount()" value="Pay" /></td>
+      </form>
+      </tr>
+    </table>
+  </div>
+  <br/><br/>
+
+  <div>
+    <table>
+      <h3>Debt</h3>
+      <tr>
+        <th>Name</th>
+        <th>Amount</th>
+      </tr>
+      <tr ng-repeat="p in persons">
+        <td>{{p.name}}</td>
+        <td>{{p.amount}}</td>
+    </tr>
+  </table>
+  </div><br/><br/>
+
+   <div>
+    <table>
+      <tr><h3>Paid</h3></tr>
+      <tr>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>Time</th>
+      </tr>
+      <tr ng-repeat="p in payments">
+        <td>{{p.name}}</td>
+        <td>{{p.amount}}</td>
+        <td>{{p.time}}</td>
+    </tr>
+  </table>
+  </div>
+
 </body>
+ <script>
+    var app = angular.module("FeeApp", []);
 
-<script>
-var app = angular.module("FeeApp", []);
+    app.controller("myController", function($scope){
+      $scope.persons = [
+                        { name:"",
+                          amount:""}];
 
-app.controller("myController", function($scope){
-  $scope.total = function (){
-   return parseInt($scope.feeOne) + parseInt($scope.feeTwo);
-  }
-});
+      $scope.payments = [{name:"", amount:"", time:""}];
 
+      $scope.addItem = function(){
+            var notAdded=true;
+            for(var i=0;i<$scope.persons.length;i++){
+              if($scope.persons[i].name==$scope.person){
+                $scope.persons[i].amount = getIntValue($scope.persons[i].amount) +getIntValue($scope.amount);
+                notAdded=false;
+                break;
+              }
+            };
+            
+            if(notAdded){
+               $scope.persons.push({'name':$scope.person, 'amount':$scope.amount});
+            }
+      };
 
+      $scope.payAmount = function(){
+           for(var i=0;i<$scope.persons.length;i++){
+              if($scope.persons[i].name==$scope.person){
+                $scope.persons[i].amount = getIntValue($scope.persons[i].amount)-getIntValue($scope.amount);
+              }
+            };
+            $scope.payments.push({'name':$scope.person, 'amount':$scope.amount, 'time':getDate()});
+      };
+
+      function getIntValue(value){
+        return parseInt(value);
+      }
+      function getDate(){
+            var currentTime = new Date();
+            var month = currentTime.getMonth() + 1;
+            var day = currentTime.getDate();
+            var year = currentTime.getFullYear();
+            var hours = currentTime.getHours();
+            var minutes = currentTime.getMinutes();
+            if(minutes<10){
+              minutes = "0"+minutes;
+            }
+            return month+"/"+day+"/"+year+"/ "+hours+":"+minutes;
+      }
+     });
 </script>
 
 </html>
