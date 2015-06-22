@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  <title>Google Phone Gallery</title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/animations.css">
+	
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/services.js"></script>
+</head>
+<body>
+<div ng-app="FeeApp" ng-controller="myController" ng-init="feeOne=0, feeTwo=0">
+<table>
+	<tr>
+    <td>
+        Arvin:
+    </td>
+    <td>
+        <input type="number" ng-model="feeOne" value="0">
+    </td>
+     <td>
+        <input type="number" ng-model="feeTwo" value="0">
+    <td>
+      <p>  Total:{{total()}}</p>
+    </td>
+  </tr>
+</table>
+</div>
+</body>
+
+<script>
+var app = angular.module("FeeApp", []);
+
+app.controller("myController", function($scope){
+  $scope.total = function (){
+   return parseInt($scope.feeOne) + parseInt($scope.feeTwo);
+  }
+});
+
+
+</script>
+
+</html>
